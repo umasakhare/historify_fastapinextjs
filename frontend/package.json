@@ -1,0 +1,31 @@
+{
+  "name": "historify-frontend",
+  "version": "2.0.0",
+  "private": true,
+	"scripts": {
+	  "frontend": "next dev",
+	  "backend": "cd ../backend && set PYTHONPATH=. && venv311\\Scripts\\python.exe app/main.py",
+	  "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
+	  "build": "next build",
+	  "start": "next start",
+	  "lint": "next lint"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "daisyui": "^5.0.43",
+    "lightweight-charts": "^4.1.3",
+    "lucide-react": "^0.294.0",
+    "next": "^15.3.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hot-toast": "^2.4.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "concurrently": "^9.1.2",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
+  }
+}
