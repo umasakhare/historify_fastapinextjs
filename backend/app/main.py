@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 from app.core.config import settings
 from app.database.database import engine, Base
-from app.routes import api, watchlist, charts, scheduler, settings as settings_router
+from app.routes import api, watchlist, charts, scheduler, settings as settings_router, backtest
 from app.utils.scheduler import scheduler_manager
 
 # Load environment variables
@@ -28,7 +28,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="Historify API",
-    description="Stock Historical Data Management API",
+    description="Stock Historical Data Management API with Backtesting",
     version="2.0.0",
     lifespan=lifespan
 )
@@ -52,6 +52,7 @@ app.include_router(watchlist.router, prefix="/api/watchlist", tags=["watchlist"]
 app.include_router(charts.router, prefix="/api/charts", tags=["charts"])
 app.include_router(scheduler.router, prefix="/api/scheduler", tags=["scheduler"])
 app.include_router(settings_router.router, prefix="/api/settings", tags=["settings"])
+app.include_router(backtest.router, prefix="/api/backtest", tags=["backtest"])
 
 @app.get("/")
 async def root():

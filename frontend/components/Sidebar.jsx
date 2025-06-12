@@ -9,7 +9,11 @@ import {
   BarChart3, 
   Clock, 
   Settings,
-  X
+  X,
+  TrendingUp,
+  Receipt,
+  Target,
+  FileBarChart
 } from 'lucide-react'
 
 const navigation = [
@@ -20,11 +24,36 @@ const navigation = [
   { name: 'Download', href: '/download', icon: Download },
   { name: 'Charts', href: '/charts', icon: BarChart3 },
   { name: 'Scheduler', href: '/scheduler', icon: Clock },
+  { 
+    name: 'Trading', 
+    href: '#', 
+    icon: TrendingUp,
+    children: [
+      { name: 'Backtest', href: '/backtest', icon: TrendingUp },
+      { name: 'Order Book', href: '/orderbook', icon: FileBarChart },
+      { name: 'Trade Book', href: '/tradebook', icon: Receipt },
+      { name: 'Positions', href: '/positions', icon: Target },
+    ]
+  },
   { name: 'Settings', href: '/settings', icon: Settings },
 ]
 
 export default function Sidebar({ isOpen, onClose }) {
   const router = useRouter()
+
+  const isActiveLink = (href) => {
+    if (href === '/') {
+      return router.pathname === '/'
+    }
+    return router.pathname.startsWith(href)
+  }
+
+  const isActiveParent = (item) => {
+    if (item.children) {
+      return item.children.some(child => isActiveLink(child.href))
+    }
+    return false
+  }
 
   return (
     <>
@@ -42,7 +71,41 @@ export default function Sidebar({ isOpen, onClose }) {
           
           <nav className="mt-8 flex-1 px-2 space-y-1">
             {navigation.map((item) => {
-              const isActive = router.pathname === item.href
+              if (item.children) {
+                return (
+                  <div key={item.name} className="space-y-1">
+                    <div className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
+                      isActiveParent(item) ? 'bg-primary/10 text-primary' : 'text-base-content/60'
+                    }`}>
+                      <item.icon className="mr-3 flex-shrink-0 h-5 w-5" />
+                      {item.name}
+                    </div>
+                    <div className="ml-8 space-y-1">
+                      {item.children.map((child) => {
+                        const isActive = isActiveLink(child.href)
+                        return (
+                          <Link
+                            key={child.name}
+                            href={child.href}
+                            className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
+                              isActive
+                                ? 'bg-primary text-white'
+                                : 'text-base-content hover:bg-base-200'
+                            }`}
+                          >
+                            <child.icon className={`mr-3 flex-shrink-0 h-4 w-4 ${
+                              isActive ? 'text-white' : 'text-base-content/60'
+                            }`} />
+                            {child.name}
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              }
+
+              const isActive = isActiveLink(item.href)
               return (
                 <Link
                   key={item.name}
@@ -87,7 +150,42 @@ export default function Sidebar({ isOpen, onClose }) {
           
           <nav className="mt-4 px-2 space-y-1">
             {navigation.map((item) => {
-              const isActive = router.pathname === item.href
+              if (item.children) {
+                return (
+                  <div key={item.name} className="space-y-1">
+                    <div className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
+                      isActiveParent(item) ? 'bg-primary/10 text-primary' : 'text-base-content/60'
+                    }`}>
+                      <item.icon className="mr-3 flex-shrink-0 h-5 w-5" />
+                      {item.name}
+                    </div>
+                    <div className="ml-8 space-y-1">
+                      {item.children.map((child) => {
+                        const isActive = isActiveLink(child.href)
+                        return (
+                          <Link
+                            key={child.name}
+                            href={child.href}
+                            onClick={onClose}
+                            className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
+                              isActive
+                                ? 'bg-primary text-white'
+                                : 'text-base-content hover:bg-base-200'
+                            }`}
+                          >
+                            <child.icon className={`mr-3 flex-shrink-0 h-4 w-4 ${
+                              isActive ? 'text-white' : 'text-base-content/60'
+                            }`} />
+                            {child.name}
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              }
+
+              const isActive = isActiveLink(item.href)
               return (
                 <Link
                   key={item.name}
